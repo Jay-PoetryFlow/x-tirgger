@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes growUp {
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 251;
+  }
+}
+
+:root {
+  --background: #FEFEFE;
+  --foreground: #111C16;
+  --primary: #1174FF;
+  --primary-light: #1A6DFF;
+  --secondary: #15181E;
+  --accent: #F7F5F0;
+  --border: #C5C6C7;
+}
+
+.dark {
+  --background: #15181E;
+  --foreground: #FEFEFE;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
+}
