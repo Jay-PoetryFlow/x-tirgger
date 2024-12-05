@@ -3,6 +3,25 @@ import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { db } from "@/lib/db"
 import { compare } from "bcrypt"
+import type { User as PrismaUser } from ".prisma/client"
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string
+      name: string
+      email: string
+      role: string
+    }
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string
+    role: string
+  }
+}
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -53,8 +72,8 @@ export const authOptions: NextAuthOptions = {
     async session({ token, session }) {
       if (token) {
         session.user.id = token.id
-        session.user.name = token.name
-        session.user.email = token.email
+        session.user.name = token.name as string
+        session.user.email = token.email as string
         session.user.role = token.role
       }
 
@@ -63,7 +82,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
-        token.role = user.role
+        token.role = (user as PrismaUser).role
       }
 
       return token
